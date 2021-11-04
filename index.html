@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Vue 隨機交友" />
+    <meta property="og:image" content="./image/vue_lover.JPG" />
+    <meta property="og:description" content="Vue 隨機交友軟體 | 快來認識認識你的真命，讓愛情不再迷茫" />
+    <meta name="description" content="Vue 隨機交友軟體 | 快來認識認識你的真命，讓愛情不再迷茫" />
+    <meta name="author" content="Andy" />
+    <link rel="shortcut icon" href="./image/lover.ico"/>
+
+    <title>Vue 隨機交友</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script src="https://kit.fontawesome.com/265ac1e79e.js"></script>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+    <div id="app">
+        <div class="navbar">
+            <div class="btngroup">
+                <button :class="{mybutton:true,btnactive:isPremium}" @click="openPremium">
+                    <div>
+                        <i class="fas fa-crown"></i> Premium
+                    </div>
+                    <div class="btntips">
+                        <span v-if="!isPremium">點擊試用高級會員</span>
+                        <span v-else>高級會員體驗中</span>
+                    </div>
+                </button>
+            </div>
+        </div>
+        <div class="container">
+            <div :class="{cards:true,notshow:!person.showcard}" v-for="person in datalist">
+                <div class="imgbox" :style="imgSourse(person)"></div>
+                <div class="namebar">
+                    <span class="gender">
+                        <span v-if="person.gender==='male'">👨</span>
+                        <span v-else>👧</span>
+                    </span>
+                    <span class="names">
+                        {{person.name.first}} {{person.name.last}}
+                    </span>
+                </div>
+                <div :class="{location:true,activelocation:person.showmap}" @click="mapswitch(person)">
+                    <div :class="{floatmap:true, openfloatmap:person.showmap}">
+                        <iframe width="100%" height="290" frameborder="0" scrolling="no" marginheight="0"
+                            marginwidth="0"
+                            :src=`https://maps.google.com.tw/maps?f=q&hl=zh-TW&geocode=&q=${person.location.coordinates.latitude},${person.location.coordinates.longitude}&z=10&output=embed`></iframe>
+                    </div>
+                    <i class="fas fa-map-marker-alt fas-margin-right"></i>{{person.location.state}},
+                    {{person.location.city}}
+                </div>
+                <div class="phone">
+                    <i class="fas fa-mobile-alt fas-margin-right"></i> {{person.phone}}
+                </div>
+                <div class="email">
+                    <i class="fas fa-envelope fas-margin-right"></i> <a
+                        :href=`mailto:${person.email}`>{{person.email}}</a>
+                </div>
+                <div class="choosebar">
+                    <div class="likebtn broken" @click="addbroken(person)">
+                        <i class="fas fa-heart-broken"></i>
+                    </div>
+                    <div class="likebtn">
+                        <i class="far fa-heart" @click="addlike(person)"></i>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div v-if="count == 5" class="final">
+            <div class="rescard" v-if="likes.length > 0">
+                <h1>恭喜配對成功</h1>
+                <div>
+                    <div v-for="item in likes" class="likespeople">
+                        <img :src="item.picture.large" alt="" class="smimg">
+                        <div class="info">
+                            <span class="namesm">{{item.name.first}} {{item.name.last}}</span>
+                            <span class="subtext">{{item.phone}}</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="rebtn" @click="recard">
+                    <i class="fas fa-redo-alt"></i>
+                    再抽一次
+                </button>
+            </div>
+            <div class="rescard" v-else>
+                <h2>錯過就像流星</h2>
+                <h3>消失在天邊</h3>
+                <button class="rebtn" @click="recard">
+                    <i class="fas fa-redo-alt"></i>
+                    再抽一次
+                </button>
+            </div>
+        </div>
+
+
+    </div>
+
+    <footer class="footerAD">
+        解鎖高級會員，那緣份將會更清晰，你我將不存在所謂朦朧美
+    </footer>
+
+    <script src="script.js" type="module"></script>
+</body>
+
+</html>
